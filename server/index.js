@@ -165,7 +165,7 @@ app.get("/api/health", (_req, res) => res.json({ status: "ok", timestamp: new Da
 app.use("/api/*path", (_req, res) => res.status(404).json({ error: "API route not found." }));
 
 app.listen(PORT, () => {
-  console.log(`\n🚀  Express server running at http://localhost:${PORT}`);
+  console.log(`\n  Express server running at http://localhost:${PORT}`);
   console.log(`   → GET /api/books/search?q=dune&type=title`);
   console.log(`   → GET /api/books/trending`);
   console.log(`   → GET /api/books/detail/OL8479867W`);
