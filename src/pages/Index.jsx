@@ -17,24 +17,32 @@ export default function Index() {
   const [totalFound, setTotalFound] = useState(0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const { isLoading, isError, refetch } = useBookSearch(searchQuery, searchType);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const { data: trending } = useTrending();
 
-  const handleSearch = useCallback(
-    async (query, type) => {
-      setSearchQuery(query);
-      setSearchType(type);
-      setHasSearched(true);
-      setPage(1);
-      setAllBooks([]);
+  const handleSearch = useCallback(async (query, type) => {
+    setSearchQuery(query);
+    setSearchType(type);
+    setHasSearched(true);
+    setPage(1);
+    setAllBooks([]);
+    setIsLoading(true);   // add this
+    setIsError(false);    // add this
 
+    try {
       const data = await fetchBooks(query, type, 1);
       setAllBooks(data.books ?? []);
       setTotalFound(data.total ?? 0);
       setTotalPages(data.totalPages ?? 0);
-    },
-    []
-  );
+    } catch {
+      setIsError(true);   // add this
+    } finally {
+      setIsLoading(false); // add this
+    }
+  },
+  []
+);
 
   const handleLoadMore = useCallback(async () => {
     if (isLoadingMore) return;
